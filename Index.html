@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Personal Web ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Mono:wght@400;700&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0a0a0a;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --gold-light: #e8d5a3;
+      --jade: #2d6a4f;
+      --jade-light: #40916c;
+      --red: #c1121f;
+      --red-soft: #e63946;
+      --bg: #faf7f2;
+      --text: #1a1a1a;
+      --muted: #6b6b6b;
+      --card-bg: #ffffff;
+      --border: rgba(201,168,76,0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Space Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CUSTOM CURSOR */
+    .cursor {
+      width: 12px; height: 12px;
+      background: var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.12s ease;
+    }
+
+    /* MUSIC PLAYER */
+    .music-player {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--gold);
+      border-radius: 50px;
+      padding: 10px 18px;
+      color: var(--gold);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+    .music-btn {
+      background: var(--gold);
+      border: none;
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--ink);
+      transition: transform 0.2s;
+    }
+    .music-btn:hover { transform: scale(1.1); }
+    .music-wave {
+      display: flex; align-items: center; gap: 3px;
+    }
+    .music-wave span {
+      display: block;
+      width: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      animation: wave 1s ease-in-out infinite;
+    }
+    .music-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+    .music-wave span:nth-child(2) { height: 16px; animation-delay: 0.15s; }
+    .music-wave span:nth-child(3) { height: 12px; animation-delay: 0.3s; }
+    .music-wave span:nth-child(4) { height: 20px; animation-delay: 0.45s; }
+    .music-wave span:nth-child(5) { height: 10px; animation-delay: 0.6s; }
+    .music-wave.paused span { animation-play-state: paused; height: 4px !important; }
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.5); }
+      50% { transform: scaleY(1); }
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%;
+      z-index: 900;
+      padding: 16px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(250,247,242,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--ink);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links {
+      display: flex; gap: 8px; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 14px;
+      border-radius: 4px;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 4px; left: 14px; right: 14px;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* PAGE SECTIONS */
+    .page {
+      min-height: 100vh;
+      padding-top: 80px;
+      position: relative;
+    }
+
+    /* ==================== HALAMAN UTAMA ==================== */
+    #home {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--ink);
+      position: relative;
+    }
+    .home-bg {
+      position: absolute; inset: 0;
+      background: 
+        radial-gradient(ellipse 80% 60% at 20% 50%, rgba(201,168,76,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(45,106,79,0.1) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 60% 80%, rgba(193,18,31,0.08) 0%, transparent 50%);
+    }
+    /* Chinese pattern overlay */
+    .home-pattern {
+      position: absolute; inset: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23c9a84c' stroke-width='1'%3E%3Crect x='10' y='10' width='60' height='60'/%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Cline x1='40' y1='10' x2='40' y2='70'/%3E%3Cline x1='10' y1='40' x2='70' y2='40'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .home-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 40px;
+    }
+    .home-eyebrow {
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .home-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(56px, 10vw, 120px);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 0.95;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .home-title .accent { color: var(--gold); font-style: italic; }
+    .home-subtitle {
+      font-size: 13px;
+      color: rgba(245,240,232,0.5);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.7s forwards;
+    }
+    .home-cta {
+      display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--ink);
+      padding: 14px 32px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-primary::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .btn-primary:hover::before { transform: scaleX(1); }
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      padding: 14px 32px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(245,240,232,0.3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .home-ornament {
+      position: absolute;
+      font-size: 180px;
+      opacity: 0.04;
+      color: var(--gold);
+      font-family: 'Noto Serif SC', serif;
+      user-select: none;
+    }
+    .home-ornament.left { left: 5%; top: 50%; transform: translateY(-50%); }
+    .home-ornament.right { right: 5%; top: 50%; transform: translateY(-50%); }
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(201,168,76,0.6);
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ==================== SECTION HEADERS ==================== */
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+      position: relative;
+    }
+    .section-tag {
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .section-title em { color: var(--jade); font-style: italic; }
+    .section-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin-top: 20px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: '';
+      width: 60px; height: 1px;
+      background: var(--border);
+    }
+    .section-divider-icon { color: var(--gold); font-size: 18px; }
+
+    /* ==================== HALAMAN BIODATA ==================== */
+    #biodata {
+      background: var(--bg);
+      padding: 100px 48px;
+    }
+
+    /* MODE TOGGLE */
+    .bio-mode-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 48px;
+      border: 1px solid var(--border);
+      width: fit-content;
+      margin-left: auto; margin-right: auto;
+      overflow: hidden;
+    }
+    .mode-btn {
+      padding: 12px 28px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: transparent;
+      color: var(--muted);
+    }
+    .mode-btn.active {
+      background: var(--gold);
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .mode-btn:not(.active):hover { background: rgba(201,168,76,0.08); color: var(--ink); }
+
+    /* FORM PANEL */
+    .bio-form-panel {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 48px;
+      position: relative;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.04);
+    }
+    .bio-form-panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--jade), var(--gold), var(--red));
+    }
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .form-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .form-input, .form-select {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      padding: 12px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+      appearance: none;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+    }
+    .form-input::placeholder { color: rgba(107,107,107,0.5); }
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 14px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      pointer-events: none;
+      font-size: 14px;
+    }
+    .form-avatar-row {
+      display: flex; align-items: center; gap: 20px;
+      margin-bottom: 28px;
+      padding: 20px;
+      border: 1px dashed var(--border);
+      background: rgba(201,168,76,0.03);
+    }
+    .form-avatar-preview {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--jade), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 2px solid var(--border);
+    }
+    .form-avatar-preview img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .form-avatar-info { flex: 1; }
+    .form-avatar-info p {
+      font-size: 11px; color: var(--muted); margin-bottom: 8px; line-height: 1.5;
+    }
+    .upload-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 8px 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .upload-btn:hover { background: var(--gold); color: var(--ink); }
+    .btn-save {
+      width: 100%;
+      background: var(--ink);
+      color: var(--cream);
+      border: none;
+      padding: 16px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-save::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .btn-save:hover::before { transform: scaleX(1); }
+    .btn-save span { position: relative; z-index: 1; }
+    .btn-save:hover span { color: var(--ink); }
+    .save-success {
+      display: none;
+      align-items: center; gap: 10px;
+      background: rgba(45,106,79,0.1);
+      border: 1px solid var(--jade);
+      color: var(--jade);
+      padding: 14px 20px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 16px;
+    }
+
+    /* PROFILE DISPLAY PANEL */
+    .bio-profile-panel { display: none; }
+    .biodata-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .biodata-visual { position: relative; }
+    .avatar-frame {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .avatar-bg {
+      width: 100%; padding-bottom: 120%;
+      background: linear-gradient(135deg, var(--jade) 0%, var(--jade-light) 50%, var(--gold) 100%);
+      border-radius: 4px 60px 4px 60px;
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .avatar-initials {
+      font-family: 'Playfair Display', serif;
+      font-size: 96px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.2);
+      position: absolute;
+    }
+    .avatar-icon {
+      font-size: 120px;
+      position: absolute;
+      bottom: 0;
+      opacity: 0.7;
+    }
+    .avatar-img-display {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .avatar-badge {
+      position: absolute;
+      bottom: -16px; right: -16px;
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      font-weight: 700;
+    }
+    .avatar-frame::before {
+      content: '';
+      position: absolute;
+      top: 16px; left: 16px; right: -16px; bottom: -16px;
+      border: 2px solid var(--border);
+      border-radius: 4px 60px 4px 60px;
+      z-index: -1;
+    }
+    .biodata-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: 40px;
+    }
+    .stat-item {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+    }
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .biodata-info { padding-top: 8px; }
+    .bio-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .bio-name .first { color: var(--ink); }
+    .bio-name .last { color: var(--jade); font-style: italic; }
+    .bio-tagline {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+    .bio-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    .bio-table tr { border-bottom: 1px solid var(--border); }
+    .bio-table td {
+      padding: 14px 0;
+      font-size: 13px;
+    }
+    .bio-table td:first-child {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      width: 140px;
+    }
+    .bio-table td:last-child { color: var(--ink); font-weight: 700; }
+    .bio-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bio-tag {
+      padding: 6px 14px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid;
+    }
+    .bio-tag.jade { border-color: var(--jade); color: var(--jade); background: rgba(45,106,79,0.06); }
+    .bio-tag.gold { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+    .bio-tag.red { border-color: var(--red); color: var(--red); background: rgba(193,18,31,0.06); }
+    .edit-hint {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 11px; margin-top: 24px;
+      padding: 12px 16px;
+      border: 1px dashed var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .edit-hint:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ==================== HALAMAN TENTANG SAYA ==================== */
+    #tentang {
+      background: var(--ink);
+      padding: 100px 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    #tentang .section-title { color: var(--cream); }
+    #tentang .section-tag { color: var(--gold); }
+    #tentang .section-divider::before,
+    #tentang .section-divider::after { background: rgba(201,168,76,0.3); }
+    .tentang-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 70% 40%, rgba(45,106,79,0.1) 0%, transparent 60%);
+    }
+    .tentang-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative; z-index: 2;
+    }
+    .tentang-intro {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 64px;
+      margin-bottom: 80px;
+      align-items: center;
+    }
+    .tentang-text p {
+      color: rgba(245,240,232,0.75);
+      font-size: 14px;
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+    .tentang-text .highlight {
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-style: italic;
+    }
+    .heritage-card {
+      background: rgba(201,168,76,0.06);
+      border: 1px solid rgba(201,168,76,0.25);
+      padding: 32px;
+      position: relative;
+    }
+    .heritage-card::before {
+      content: '华';
+      position: absolute;
+      top: -20px; right: 20px;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 64px;
+      color: var(--gold);
+      opacity: 0.15;
+      line-height: 1;
+    }
+    .heritage-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 22px;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .heritage-desc {
+      color: rgba(245,240,232,0.7);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .heritage-icons {
+      display: flex; gap: 16px; margin-top: 20px;
+    }
+    .heritage-icon {
+      width: 48px; height: 48px;
+      border: 1px solid rgba(201,168,76,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+
+    /* TIMELINE */
+    .timeline-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .timeline-title span { color: var(--gold); font-style: italic; }
+    .timeline {
+      position: relative;
+      padding-left: 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr;
+      gap: 0 24px;
+      margin-bottom: 40px;
+      align-items: center;
+    }
+    .timeline-item:nth-child(odd) .tl-card { grid-column: 1; text-align: right; }
+    .timeline-item:nth-child(odd) .tl-empty { grid-column: 3; }
+    .timeline-item:nth-child(even) .tl-card { grid-column: 3; text-align: left; }
+    .timeline-item:nth-child(even) .tl-empty { grid-column: 1; }
+    .tl-dot {
+      grid-column: 2;
+      width: 40px; height: 40px;
+      background: var(--ink);
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      z-index: 1;
+      justify-self: center;
+    }
+    .tl-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      padding: 20px 24px;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .tl-card:hover {
+      border-color: rgba(201,168,76,0.4);
+      background: rgba(201,168,76,0.06);
+    }
+    .tl-level {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .tl-school {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .tl-desc {
+      color: rgba(245,240,232,0.5);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    /* ==================== HALAMAN HOBI ==================== */
+    #hobi {
+      background: var(--bg);
+      padding: 100px 48px;
+    }
+    .hobi-content { max-width: 1100px; margin: 0 auto; }
+    .hobi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .hobi-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hobi-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+    }
+    .hobi-img {
+      width: 100%; height: 320px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s;
+    }
+    .hobi-card:hover .hobi-img { transform: scale(1.04); }
+    .hobi-img-placeholder {
+      width: 100%; height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      overflow: hidden;
+      transition: transform 0.5s;
+    }
+    .hobi-card:hover .hobi-img-placeholder { transform: scale(1.04); }
+    .game-bg {
+      background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%);
+      position: relative;
+    }
+    .game-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(99,179,237,0.1)' stroke-width='0.5'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3Cline x1='0' y1='30' x2='60' y2='30'/%3E%3Cline x1='30' y1='0' x2='30' y2='60'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .cook-bg {
+      background: linear-gradient(135deg, #2d1b00 0%, #5c3d11 40%, #8b5e3c 100%);
+    }
+    .hobi-body { padding: 28px 32px 32px; }
+    .hobi-icon-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+    }
+    .hobi-icon {
+      width: 40px; height: 40px;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      color: var(--ink);
+      flex-shrink: 0;
+    }
+    .hobi-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--ink);
+    }
+    .hobi-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .hobi-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .hobi-tag {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--border);
+      color: var(--gold);
+    }
+    .ml-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #e63946, #c1121f);
+      color: white;
+      padding: 8px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    .ml-badge::before { content: '⚡'; }
+    /* Game pixel art icon */
+    .game-icon {
+      font-size: 72px;
+      filter: drop-shadow(0 0 20px rgba(99,179,237,0.5));
+      animation: float 3s ease-in-out infinite;
+    }
+    .cook-icon {
+      font-size: 72px;
+      filter: drop-shadow(0 0 20px rgba(201,168,76,0.4));
+      animation: float 3s ease-in-out infinite reverse;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--ink);
+      padding: 48px;
+      text-align: center;
+      border-top: 1px solid rgba(201,168,76,0.2);
+    }
+    .footer-text {
+      color: rgba(245,240,232,0.4);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .footer-heart { color: var(--red-soft); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      #biodata, #tentang, #hobi { padding: 80px 24px; }
+      .biodata-grid { grid-template-columns: 1fr; }
+      .tentang-intro { grid-template-columns: 1fr; }
+      .hobi-grid { grid-template-columns: 1fr; }
+      .timeline::before { left: 20px; }
+      .timeline-item { grid-template-columns: 20px 1fr; }
+      .timeline-item:nth-child(odd) .tl-card,
+      .timeline-item:nth-child(even) .tl-card { grid-column: 2; text-align: left; }
+      .tl-dot { grid-column: 1; width: 24px; height: 24px; font-size: 10px; }
+      .tl-empty { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CUSTOM CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- MUSIC PLAYER -->
+  <div class="music-player">
+    <div class="music-wave" id="musicWave">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()">▶</button>
+    <span id="musicLabel">Lo-fi Vibes</span>
+  </div>
+
+  <!-- HIDDEN AUDIO — Lo-fi ambient from free CDN -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">My<span>Web</span></div>
+    <ul class="nav-links">
+      <li><a href="#home">Beranda</a></li>
+      <li><a href="#biodata">Biodata</a></li>
+      <li><a href="#tentang">Tentang Saya</a></li>
+      <li><a href="#hobi">Hobi</a></li>
+    </ul>
+  </nav>
+
+  <!-- ==================== HALAMAN UTAMA ==================== -->
+  <section class="page" id="home">
+    <div class="home-bg"></div>
+    <div class="home-pattern"></div>
+    <div class="home-ornament left">福</div>
+    <div class="home-ornament right">寿</div>
+    <div class="home-content">
+      <p class="home-eyebrow">✦ Selamat Datang Di Website Pribadiku ✦</p>
+      <h1 class="home-title">
+        Kenali<br><span class="accent">Aku</span><br>Lebih Dalam
+      </h1>
+      <p class="home-subtitle">Mahasiswa · Gamer · Koki · Muslim</p>
+      <div class="home-cta">
+        <a href="#biodata" class="btn-primary">Lihat Biodata</a>
+        <a href="#tentang" class="btn-outline">Tentang Saya</a>
+      </div>
+    </div>
+    <div class="scroll-hint">Scroll</div>
+  </section>
+
+  <!-- ==================== HALAMAN BIODATA ==================== -->
+  <section class="page" id="biodata">
+    <div class="section-header reveal">
+      <span class="section-tag">✦ Data Diri ✦</span>
+      <h2 class="section-title">Halaman <em>Biodata</em></h2>
+      <div class="section-divider"><span class="section-divider-icon">❋</span></div>
+    </div>
+
+    <!-- MODE TOGGLE -->
+    <div class="bio-mode-toggle reveal">
+      <button class="mode-btn active" id="btnFormMode" onclick="switchMode('form')">✏️ Isi Data</button>
+      <button class="mode-btn" id="btnProfileMode" onclick="switchMode('profile')">👤 Lihat Profil</button>
+    </div>
+
+    <!-- FORM PANEL -->
+    <div class="bio-form-panel reveal" id="bioFormPanel">
+      <h3 class="form-title">Isi Biodata Kamu</h3>
+      <p class="form-subtitle">Lengkapi data diri · Klik simpan untuk melihat profil</p>
+
+      <!-- Avatar Upload -->
+      <div class="form-avatar-row">
+        <div class="form-avatar-preview" id="formAvatarPreview">🧑‍🎓</div>
+        <div class="form-avatar-info">
+          <p>Upload foto profil kamu (opsional). Format JPG/PNG, maks 2MB.</p>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+          <button class="upload-btn" onclick="document.getElementById('avatarInput').click()">📷 Upload Foto</button>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Nama Depan *</label>
+          <input class="form-input" id="fNamaDepan" type="text" placeholder="Contoh: Ahmad" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Belakang</label>
+          <input class="form-input" id="fNamaBelakang" type="text" placeholder="Contoh: Fauzi" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tempat Lahir *</label>
+          <input class="form-input" id="fTempatLahir" type="text" placeholder="Kota kelahiran" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tanggal Lahir *</label>
+          <input class="form-input" id="fTanggalLahir" type="date" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Jenis Kelamin</label>
+          <div class="select-wrap">
+            <select class="form-select" id="fJenisKelamin">
+              <option value="">Pilih...</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Umur</label>
+          <input class="form-input" id="fUmur" type="number" value="20" min="1" max="99" placeholder="20" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Agama</label>
+          <div class="select-wrap">
+            <select class="form-select" id="fAgama">
+              <option value="Islam" selected>Islam</option>
+              <option value="Kristen">Kristen</option>
+              <option value="Katolik">Katolik</option>
+              <option value="Hindu">Hindu</option>
+              <option value="Buddha">Buddha</option>
+              <option value="Konghucu">Konghucu</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Keturunan / Etnis</label>
+          <input class="form-input" id="fKeturunan" type="text" value="Tionghoa (China)" placeholder="Tionghoa, Jawa, dsb" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Universitas</label>
+          <input class="form-input" id="fUniversitas" type="text" value="Universitas Muhammadiyah Yogyakarta" placeholder="Nama universitas" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Jurusan / Program Studi</label>
+          <input class="form-input" id="fJurusan" type="text" placeholder="Contoh: Teknik Informatika" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Email</label>
+          <input class="form-input" id="fEmail" type="email" placeholder="email@example.com" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">No. Telepon / WA</label>
+          <input class="form-input" id="fTelp" type="tel" placeholder="08xxxxxxxxxx" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Motto / Kutipan Favoritmu</label>
+          <input class="form-input" id="fMotto" type="text" placeholder="Tulis motto hidupmu..." />
+        </div>
+      </div>
+
+      <button class="btn-save" onclick="saveBiodata()"><span>💾 Simpan & Tampilkan Profil</span></button>
+      <div class="save-success" id="saveSuccess">✅ Biodata berhasil disimpan! Klik "Lihat Profil" di atas.</div>
+    </div>
+
+    <!-- PROFILE DISPLAY PANEL -->
+    <div class="bio-profile-panel" id="bioProfilePanel">
+      <div class="biodata-grid reveal">
+        <div class="biodata-visual">
+          <div class="avatar-frame">
+            <div class="avatar-bg">
+              <div class="avatar-initials" id="profileInitials">?</div>
+              <div class="avatar-icon" id="profileIcon">🧑‍🎓</div>
+              <img class="avatar-img-display" id="profileImg" src="" alt="foto profil" />
+            </div>
+            <div class="avatar-badge" id="profileBadge">Mahasiswa UMY</div>
+          </div>
+          <div class="biodata-stats">
+            <div class="stat-item">
+              <span class="stat-num" id="profileUmur">20</span>
+              <span class="stat-label">Tahun</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">5</span>
+              <span class="stat-label">Jenjang Pendidikan</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">2</span>
+              <span class="stat-label">Hobi Utama</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">☪</span>
+              <span class="stat-label">Agama Islam</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="biodata-info">
+          <div class="bio-name">
+            <div class="first" id="profileNamaDepan">Nama</div>
+            <div class="last" id="profileNamaBelakang">Kamu</div>
+          </div>
+          <p class="bio-tagline" id="profileTagline">✦ Proud Muslim · Chinese Heritage · UMY Student ✦</p>
+          <table class="bio-table">
+            <tr><td>Nama Lengkap</td><td id="tdNamaLengkap">—</td></tr>
+            <tr><td>Tempat Lahir</td><td id="tdTempatLahir">—</td></tr>
+            <tr><td>Tanggal Lahir</td><td id="tdTanggalLahir">—</td></tr>
+            <tr><td>Jenis Kelamin</td><td id="tdJenisKelamin">—</td></tr>
+            <tr><td>Umur</td><td id="tdUmur">20 Tahun</td></tr>
+            <tr><td>Agama</td><td id="tdAgama">Islam</td></tr>
+            <tr><td>Keturunan</td><td id="tdKeturunan">Tionghoa (China)</td></tr>
+            <tr><td>Universitas</td><td id="tdUniversitas">UMY</td></tr>
+            <tr><td>Jurusan</td><td id="tdJurusan">—</td></tr>
+            <tr><td>Email</td><td id="tdEmail">—</td></tr>
+            <tr><td>No. Telepon</td><td id="tdTelp">—</td></tr>
+            <tr><td>Motto</td><td id="tdMotto">—</td></tr>
+          </table>
+          <div class="bio-tags">
+            <span class="bio-tag jade">🕌 Muslim</span>
+            <span class="bio-tag gold">🏫 UMY</span>
+            <span class="bio-tag red">🎮 Gamer</span>
+            <span class="bio-tag jade">🍳 Memasak</span>
+            <span class="bio-tag gold">📖 Hafizh</span>
+          </div>
+          <div class="edit-hint" onclick="switchMode('form')">
+            ✏️ <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase">Klik untuk edit biodata</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HALAMAN TENTANG SAYA ==================== -->
+  <section class="page" id="tentang">
+    <div class="tentang-bg"></div>
+    <div class="tentang-content">
+      <div class="section-header reveal">
+        <span class="section-tag">✦ Kisah Hidupku ✦</span>
+        <h2 class="section-title" style="color:var(--cream)">Tentang <em>Saya</em></h2>
+        <div class="section-divider"><span class="section-divider-icon">❋</span></div>
+      </div>
+
+      <div class="tentang-intro reveal">
+        <div class="tentang-text">
+          <p class="highlight">"Berakar dari tradisi Tionghoa, tumbuh dalam cahaya Islam, menatap dunia dengan penuh semangat."</p>
+          <p>Saya berasal dari keluarga <strong style="color:var(--gold)">keturunan China (Tionghoa)</strong> yang kaya akan tradisi dan budaya. Meskipun berlatar belakang budaya Tionghoa, saya dibesarkan dalam lingkungan yang kuat dengan nilai-nilai <strong style="color:var(--gold)">Agama Islam</strong> — sebuah perpaduan indah yang membentuk karakter dan kepribadian saya.</p>
+          <p>Perjalanan hidup saya dimulai dari bangku sekolah berbasis Islam, menempa ilmu di pondok pesantren, hingga melanjutkan pendidikan tinggi di Yogyakarta — kota pelajar yang penuh inspirasi.</p>
+        </div>
+        <div class="heritage-card">
+          <h3 class="heritage-title">Warisan Budaya & Iman</h3>
+          <p class="heritage-desc">Sebuah identitas yang unik: darah Tionghoa mengalir dalam diri, namun hati tunduk pada ajaran Islam. Dua warisan yang berjalan beriringan dengan harmonis dan penuh kebanggaan.</p>
+          <div class="heritage-icons">
+            <div class="heritage-icon" title="Keturunan China">🏮</div>
+            <div class="heritage-icon" title="Agama Islam">☪️</div>
+            <div class="heritage-icon" title="Hafizh Qur'an">📖</div>
+            <div class="heritage-icon" title="Pelajar">🎓</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="timeline-title reveal">Jejak <span>Pendidikan</span> Saya</p>
+      <div class="timeline reveal">
+
+        <div class="timeline-item">
+          <div class="tl-card">
+            <div class="tl-level">Taman Kanak-Kanak</div>
+            <div class="tl-school">TK Humairoh</div>
+            <div class="tl-desc">Awal perjalanan menimba ilmu</div>
+          </div>
+          <div class="tl-dot">🌱</div>
+          <div class="tl-empty"></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-empty"></div>
+          <div class="tl-dot">📚</div>
+          <div class="tl-card">
+            <div class="tl-level">Sekolah Dasar</div>
+            <div class="tl-school">SD Humairoh</div>
+            <div class="tl-desc">Membangun fondasi ilmu dasar</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-card">
+            <div class="tl-level">Sekolah Menengah Pertama</div>
+            <div class="tl-school">Pondok Pesantren Tahfidz Al-Quds</div>
+            <div class="tl-desc">Menghafal & mempelajari Al-Qur'an</div>
+          </div>
+          <div class="tl-dot">🕌</div>
+          <div class="tl-empty"></div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-empty"></div>
+          <div class="tl-dot">📖</div>
+          <div class="tl-card">
+            <div class="tl-level">Sekolah Menengah Atas</div>
+            <div class="tl-school">Pondok Pesantren Tahfidz Al-Quds</div>
+            <div class="tl-desc">Memperdalam hafalan & ilmu agama</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="tl-card">
+            <div class="tl-level">Perguruan Tinggi</div>
+            <div class="tl-school">Universitas Muhammadiyah Yogyakarta</div>
+            <div class="tl-desc">Meraih cita-cita di Kota Pelajar</div>
+          </div>
+          <div class="tl-dot">🎓</div>
+          <div class="tl-empty"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HALAMAN HOBI ==================== -->
+  <section class="page" id="hobi">
+    <div class="section-header reveal">
+      <span class="section-tag">✦ Passion & Fun ✦</span>
+      <h2 class="section-title">Halaman <em>Hobi</em></h2>
+      <div class="section-divider"><span class="section-divider-icon">❋</span></div>
+    </div>
+    <div class="hobi-content">
+      <div class="hobi-grid reveal">
+
+        <!-- HOBI 1: GAME ONLINE -->
+        <div class="hobi-card">
+          <div class="hobi-img-placeholder game-bg">
+            <span class="game-icon">🎮</span>
+          </div>
+          <div class="hobi-body">
+            <div class="hobi-icon-row">
+              <div class="hobi-icon">🕹️</div>
+              <h3 class="hobi-name">Main Game Online</h3>
+            </div>
+            <div class="ml-badge">FAVORITE: Mobile Legends</div>
+            <p class="hobi-desc">
+              Dunia game adalah tempat saya berpetualang tanpa batas! Saya menikmati berbagai genre game online, mulai dari battle royale, RPG, strategi, hingga MOBA. Namun dari semua game yang saya mainkan, <strong>Mobile Legends: Bang Bang</strong> adalah yang paling sering menemani hari-hari saya — dari lane push hingga teamfight yang epic!
+            </p>
+            <div class="hobi-tags">
+              <span class="hobi-tag">Mobile Legends</span>
+              <span class="hobi-tag">MOBA</span>
+              <span class="hobi-tag">Battle Royale</span>
+              <span class="hobi-tag">RPG</span>
+              <span class="hobi-tag">All Genre</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOBI 2: MEMASAK -->
+        <div class="hobi-card">
+          <div class="hobi-img-placeholder cook-bg">
+            <span class="cook-icon">🍳</span>
+          </div>
+          <div class="hobi-body">
+            <div class="hobi-icon-row">
+              <div class="hobi-icon">🥢</div>
+              <h3 class="hobi-name">Memasak</h3>
+            </div>
+            <p class="hobi-desc">
+              Memasak bukan sekadar aktivitas dapur — ini adalah seni mengekspresikan kreativitas lewat rasa! Dengan latar belakang keturunan Tionghoa dan selera lidah yang kaya, saya suka bereksperimen dengan berbagai masakan. Dari masakan Nusantara, Chinese food, hingga olahan modern — dapur adalah studio seni saya.
+            </p>
+            <div class="hobi-tags">
+              <span class="hobi-tag">Chinese Food</span>
+              <span class="hobi-tag">Masakan Nusantara</span>
+              <span class="hobi-tag">Eksperimen Resep</span>
+              <span class="hobi-tag">Kuliner</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-text">Dibuat dengan <span class="footer-heart">♥</span> · Muslim · Tionghoa · UMY · 2025</p>
+  </footer>
+
+  <script>
+    // ===== BIODATA FORM =====
+    let avatarDataUrl = null;
+
+    function switchMode(mode) {
+      const formPanel = document.getElementById('bioFormPanel');
+      const profilePanel = document.getElementById('bioProfilePanel');
+      const btnForm = document.getElementById('btnFormMode');
+      const btnProfile = document.getElementById('btnProfileMode');
+      if (mode === 'form') {
+        formPanel.style.display = 'block';
+        profilePanel.style.display = 'none';
+        btnForm.classList.add('active');
+        btnProfile.classList.remove('active');
+      } else {
+        formPanel.style.display = 'none';
+        profilePanel.style.display = 'block';
+        btnForm.classList.remove('active');
+        btnProfile.classList.add('active');
+      }
+    }
+
+    function handleAvatarUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        avatarDataUrl = e.target.result;
+        const preview = document.getElementById('formAvatarPreview');
+        preview.innerHTML = '<img src="' + avatarDataUrl + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
+      const d = new Date(dateStr);
+      const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+      return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    function saveBiodata() {
+      const namaDepan = document.getElementById('fNamaDepan').value.trim() || 'Nama';
+      const namaBelakang = document.getElementById('fNamaBelakang').value.trim() || '';
+      const tempatLahir = document.getElementById('fTempatLahir').value.trim() || '—';
+      const tanggalLahir = document.getElementById('fTanggalLahir').value;
+      const jenisKelamin = document.getElementById('fJenisKelamin').value || '—';
+      const umur = document.getElementById('fUmur').value || '20';
+      const agama = document.getElementById('fAgama').value;
+      const keturunan = document.getElementById('fKeturunan').value.trim() || 'Tionghoa (China)';
+      const universitas = document.getElementById('fUniversitas').value.trim() || '—';
+      const jurusan = document.getElementById('fJurusan').value.trim() || '—';
+      const email = document.getElementById('fEmail').value.trim() || '—';
+      const telp = document.getElementById('fTelp').value.trim() || '—';
+      const motto = document.getElementById('fMotto').value.trim() || '—';
+
+      document.getElementById('profileNamaDepan').textContent = namaDepan;
+      document.getElementById('profileNamaBelakang').textContent = namaBelakang || '';
+      document.getElementById('profileUmur').textContent = umur;
+      const badgeText = universitas.length > 20 ? 'Mahasiswa' : universitas;
+      document.getElementById('profileBadge').textContent = badgeText;
+
+      const initials = ((namaDepan[0] || '') + (namaBelakang[0] || '')).toUpperCase();
+      document.getElementById('profileInitials').textContent = initials || '?';
+
+      if (avatarDataUrl) {
+        const img = document.getElementById('profileImg');
+        img.src = avatarDataUrl;
+        img.style.display = 'block';
+        document.getElementById('profileIcon').style.display = 'none';
+        document.getElementById('profileInitials').style.display = 'none';
+      }
+
+      document.getElementById('tdNamaLengkap').textContent = [namaDepan, namaBelakang].filter(Boolean).join(' ');
+      document.getElementById('tdTempatLahir').textContent = tempatLahir;
+      document.getElementById('tdTanggalLahir').textContent = formatDate(tanggalLahir);
+      document.getElementById('tdJenisKelamin').textContent = jenisKelamin;
+      document.getElementById('tdUmur').textContent = umur + ' Tahun';
+      document.getElementById('tdAgama').textContent = agama;
+      document.getElementById('tdKeturunan').textContent = keturunan;
+      document.getElementById('tdUniversitas').textContent = universitas;
+      document.getElementById('tdJurusan').textContent = jurusan;
+      document.getElementById('tdEmail').textContent = email;
+      document.getElementById('tdTelp').textContent = telp;
+      document.getElementById('tdMotto').textContent = motto;
+
+      const uniShort = universitas.split(' ').pop();
+      document.getElementById('profileTagline').textContent = '✦ ' + agama + ' · ' + keturunan + ' · ' + uniShort + ' Student ✦';
+
+      const succ = document.getElementById('saveSuccess');
+      succ.style.display = 'flex';
+      setTimeout(() => {
+        succ.style.display = 'none';
+        switchMode('profile');
+      }, 1800);
+    }
+
+    // CURSOR
+    const cursor = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animateCursor() {
+      rx += (mx - rx) * 0.15;
+      ry += (my - ry) * 0.15;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+      cursorRing.style.left = rx + 'px';
+      cursorRing.style.top = ry + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // REVEAL ON SCROLL
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+
+    // MUSIC
+    const audio = document.getElementById('bgMusic');
+    const btn = document.getElementById('musicBtn');
+    const wave = document.getElementById('musicWave');
+    let playing = false;
+    function toggleMusic() {
+      if (playing) {
+        audio.pause();
+        btn.textContent = '▶';
+        wave.classList.add('paused');
+        playing = false;
+      } else {
+        audio.play().catch(() => {});
+        btn.textContent = '⏸';
+        wave.classList.remove('paused');
+        playing = true;
+      }
+    }
+
+    // NAV ACTIVE HIGHLIGHT
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let cur = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) cur = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--ink)' : '';
+      });
+    });
+  </script>
+</body>
+</html>
